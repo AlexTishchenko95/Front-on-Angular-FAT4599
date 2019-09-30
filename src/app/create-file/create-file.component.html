@@ -1,0 +1,11 @@
+<form action="/fileCreate" name="createForm" method="post">
+  <input
+    type="text"
+    name="field-create"
+    placeholder="Enter file name"
+    [(ngModel)]="inputCreate"
+  />
+  <button class="btnCreate" (click)="readCreateForm(inputCreate)">
+    Create file
+  </button>
+</form>

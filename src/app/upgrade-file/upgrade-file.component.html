@@ -1,0 +1,19 @@
+<form action="/upgradeFile" name="upgradeForm" method="post">
+  <input
+    type="text"
+    id="input-field-upgrade"
+    name="field-upgrade"
+    placeholder="Enter text to add"
+    [(ngModel)]="textAdd"
+  />
+  <input
+    type="text"
+    id="input-field-filename"
+    name="field-filename"
+    placeholder="Enter file name"
+    [(ngModel)]="fileName"
+  />
+  <button class="btnUpgrade" (click)="readUpgradeForm(textAdd, fileName)">
+    Upgrade file
+  </button>
+</form>

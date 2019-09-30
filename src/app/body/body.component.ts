@@ -15,13 +15,6 @@ export class BodyComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  showFileList() {
-    this.http.get('http://localhost:3000/showFileList')
-      .subscribe((response) => {
-        this.response = response;
-        this.text = response;
-      });
-  }
 
   readCreateForm(inputCreate) {
     let header = new HttpHeaders();
