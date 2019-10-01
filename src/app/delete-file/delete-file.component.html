@@ -1,0 +1,11 @@
+<form action="/fileDelete" name="deleteForm" method="post">
+  <input
+    type="text"
+    name="field-delete"
+    placeholder="Enter file name"
+    [(ngModel)]="inputDelete"
+  />
+  <button class="btnDelete" (click)="readDeleteForm(inputDelete)">
+    Delete file
+  </button>
+</form>

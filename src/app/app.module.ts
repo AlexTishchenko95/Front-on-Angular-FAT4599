@@ -5,8 +5,11 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { BodyComponent } from './body/body.component';
-import { ClockComponent } from './clock/clock.component';
+import { ShowFileListComponent } from './show-file-list/show-file-list.component';
+import { CreateFileComponent } from './create-file/create-file.component';
+import { DeleteFileComponent } from './delete-file/delete-file.component';
+import { UpgradeFileComponent } from './upgrade-file/upgrade-file.component';
+import * as innerTextComponent from './inner-text/inner-text.component';
 
 
 
@@ -14,8 +17,11 @@ import { ClockComponent } from './clock/clock.component';
   declarations: [
     AppComponent,
     HeaderComponent,
-    BodyComponent,
-    ClockComponent
+    ShowFileListComponent,
+    CreateFileComponent,
+    DeleteFileComponent,
+    UpgradeFileComponent,
+    innerTextComponent.InnerTextComponent
   ],
   imports: [
     BrowserModule,
