@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
+import { HttpReqService } from '../http-req.service';
 
 @Component({
   selector: 'app-show-file-list',
@@ -9,19 +9,16 @@ import { ShareDataService } from '../share-data.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ShowFileListComponent implements OnInit {
+export class ShowFileListComponent {
 
-  constructor(private http: HttpClient, private share: ShareDataService) { }
+  constructor(private share: ShareDataService, private httpreq: HttpReqService) { }
 
   showFileList() {
-    this.http.get('http://localhost:3000/showFileList')
+    this.httpreq.getReq('http://localhost:3000/showFileList')
       .subscribe((response: string[]) => {
-        this.share.data$.next('File list: ' + response.join());
+        this.share.dataList$.next(response);
       });
   }
-
-  ngOnInit() {
-
-  }
-
 }
+
+

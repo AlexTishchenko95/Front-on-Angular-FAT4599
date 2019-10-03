@@ -2,32 +2,27 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { ShowFileListComponent } from './show-file-list/show-file-list.component';
-import { CreateFileComponent } from './create-file/create-file.component';
-import { DeleteFileComponent } from './delete-file/delete-file.component';
-import { UpgradeFileComponent } from './upgrade-file/upgrade-file.component';
-import * as innerTextComponent from './inner-text/inner-text.component';
-
+import { ShowFileListModule } from './show-file-list/show-file-list.module';
+import { CreateFileModule } from './create-file/create-file.module';
+import { DeleteFileModule } from './delete-file/delete-file.module';
+import { UpgradeFileModule } from './upgrade-file/upgrade-file.module';
+import { HeaderModule } from './header/header.module';
+import { InnerTextModule } from './inner-text/inner-text.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
-    ShowFileListComponent,
-    CreateFileComponent,
-    DeleteFileComponent,
-    UpgradeFileComponent,
-    innerTextComponent.InnerTextComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    FormsModule
+    ShowFileListModule,
+    CreateFileModule,
+    DeleteFileModule,
+    UpgradeFileModule,
+    HeaderModule,
+    InnerTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]
