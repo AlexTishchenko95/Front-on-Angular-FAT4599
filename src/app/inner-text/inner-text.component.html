@@ -1,3 +1,9 @@
+<mat-list>
+  <a mat-list-item *ngFor="let item of list$ | async">File: {{ item }}</a>
+</mat-list>
+
+<br />
+
 <pre>
-    <div id="content" [innerHtml]="text$ | async"></div>
+<p>  {{ text$ | async }}</p>
 </pre>

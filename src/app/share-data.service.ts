@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ShareDataService {
+  readonly dataList$ = new BehaviorSubject([]);
   readonly data$ = new BehaviorSubject('');
 
   constructor() { }

@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { HttpReqService } from '../http-req.service';
 import { ShareDataService } from '../share-data.service';
 
 @Component({
@@ -8,23 +8,16 @@ import { ShareDataService } from '../share-data.service';
   styleUrls: ['./delete-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DeleteFileComponent implements OnInit {
+export class DeleteFileComponent {
 
 
-  constructor(private http: HttpClient, private share: ShareDataService) { }
+  constructor(private httpreq: HttpReqService, private share: ShareDataService) { }
 
   readDeleteForm(inputDelete) {
-    let header = new HttpHeaders();
-    header = header.append('content-type', 'application/json');
-    const json = JSON.stringify({ fileName: inputDelete });
-    this.http.post('http://localhost:3000/fileDelete', json, { headers: header })
+    this.httpreq.getPost('http://localhost:3000/fileDelete', inputDelete, '')
       .subscribe((response: string) => {
         this.share.data$.next('File deleted: ' + response);
       });
   }
-
-
-  ngOnInit() {
-  }
-
 }
+
