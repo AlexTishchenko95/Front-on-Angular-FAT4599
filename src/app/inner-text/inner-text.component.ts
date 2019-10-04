@@ -13,6 +13,7 @@ export class InnerTextComponent {
   list$: Observable<string[]> = this.share.dataList$;
   text$: Observable<string> = this.share.data$;
 
-  constructor(private share: ShareDataService) { }
+  constructor(private share: ShareDataService) {
+  }
 }
 

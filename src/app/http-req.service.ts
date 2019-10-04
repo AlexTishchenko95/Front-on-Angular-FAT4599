@@ -8,11 +8,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class HttpReqService {
   constructor(private http: HttpClient) { }
 
-  getReq(adress) {
+  requestGet(adress) {
     return this.http.get(adress);
   }
 
-  getPost(adress, inputField, textName) {
+  requestPost(adress, inputField, textName) {
     let header = new HttpHeaders();
     header = header.append('content-type', 'application/json');
     const json = JSON.stringify({ fileName: inputField, textField: textName });

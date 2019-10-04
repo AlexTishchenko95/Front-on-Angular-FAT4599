@@ -1,5 +1,6 @@
-<div>
+<form class="formList" [formGroup]="formList">
   <button
+    *ngIf="!isPush"
     mat-raised-button
     color="primary"
     class="fileList"
@@ -7,4 +8,14 @@
   >
     Show file list
   </button>
-</div>
+
+  <button
+    *ngIf="isPush"
+    mat-raised-button
+    color="primary"
+    class="fileList"
+    (click)="closeFileList()"
+  >
+    Close file list
+  </button>
+</form>

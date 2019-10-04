@@ -1,12 +1,9 @@
-<form class="formUpgrade">
+<form class="formUpgrade" [formGroup]="formUpgrade">
   <mat-form-field>
     <textarea
       matInput
-      type="text"
-      id="input-field-upgrade"
-      name="field-upgrade"
+      formControlName="inputTextForm"
       placeholder="Enter text to add in upgrade file"
-      [(ngModel)]="textAdd"
     ></textarea>
   </mat-form-field>
 
@@ -15,18 +12,16 @@
   <mat-form-field>
     <input
       matInput
-      type="text"
-      id="input-field-filename"
-      name="field-filename"
+      formControlName="inputNameForm"
       placeholder="Enter file name"
-      [(ngModel)]="fileName"
     />
   </mat-form-field>
   <button
     mat-raised-button
     color="primary"
     class="btnUpgrade"
-    (click)="readUpgradeForm(textAdd, fileName)"
+    (click)="readUpgradeForm()"
+    [disabled]="formUpgrade.invalid"
   >
     Upgrade file
   </button>

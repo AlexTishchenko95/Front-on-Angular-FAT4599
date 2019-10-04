@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-show-file-list',
@@ -10,13 +11,29 @@ import { HttpReqService } from '../http-req.service';
 })
 
 export class ShowFileListComponent {
+  formList: FormGroup;
+  isPush: boolean;
 
-  constructor(private share: ShareDataService, private httpreq: HttpReqService) { }
+  constructor(private share: ShareDataService, private httpreq: HttpReqService) {
+    this.httpreq = httpreq;
+    this.share = share;
+    this.formList = new FormGroup({
+    });
+  }
 
   showFileList() {
-    this.httpreq.getReq('http://localhost:3000/showFileList')
+    this.isPush = !this.isPush;
+    this.httpreq.requestGet('http://localhost:3000/showFileList')
       .subscribe((response: string[]) => {
         this.share.dataList$.next(response);
+      });
+  }
+
+  closeFileList() {
+    this.isPush = !this.isPush;
+    this.httpreq.requestGet('http://localhost:3000/showFileList')
+      .subscribe(() => {
+        this.share.dataList$.next([]);
       });
   }
 }
