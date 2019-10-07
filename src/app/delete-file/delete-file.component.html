@@ -1,17 +1,16 @@
-<form class="formDelete">
+<form class="formDelete" [formGroup]="formDelete">
   <mat-form-field>
-    <input
-      matInput
-      type="text"
-      name="field-delete"
-      placeholder="Enter file name"
-      [(ngModel)]="inputDelete"
-  /></mat-form-field>
+    <input matInput formControlName="name" placeholder="Enter file name" />
+    <mat-error *ngIf="formDelete.invalid">
+      {{ formDelete.get('name').errors?.extention }}
+    </mat-error>
+  </mat-form-field>
   <button
     mat-raised-button
     color="warn"
     class="btnDelete"
-    (click)="readDeleteForm(inputDelete)"
+    (click)="onDeleteFile()"
+    [disabled]="formDelete.invalid"
   >
     Delete file
   </button>

@@ -1,10 +1,19 @@
-<div>
-  <button
-    mat-raised-button
-    color="primary"
-    class="fileList"
-    (click)="showFileList()"
-  >
-    Show file list
-  </button>
-</div>
+<button
+  *ngIf="!isPush"
+  mat-raised-button
+  color="primary"
+  class="fileList"
+  (click)="showFileList()"
+>
+  Show file list
+</button>
+
+<button
+  *ngIf="isPush"
+  mat-raised-button
+  color="primary"
+  class="fileList"
+  (click)="closeFileList()"
+>
+  Close file list
+</button>

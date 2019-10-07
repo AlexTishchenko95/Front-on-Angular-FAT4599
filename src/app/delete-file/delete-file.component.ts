@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { HttpReqService } from '../http-req.service';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
+import { HttpReqService } from '../http-req.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { extentionValidator } from '../extention-validator';
 
 @Component({
   selector: 'app-delete-file',
@@ -8,15 +10,28 @@ import { ShareDataService } from '../share-data.service';
   styleUrls: ['./delete-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DeleteFileComponent {
 
+export class DeleteFileComponent implements OnInit {
+  formDelete: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService) { }
+  constructor(private httpreq: HttpReqService, private share: ShareDataService) {
+  }
 
-  readDeleteForm(inputDelete) {
-    this.httpreq.getPost('http://localhost:3000/fileDelete', inputDelete, '')
+  ngOnInit() {
+    this.formDelete = new FormGroup({
+      name: new FormControl('', [Validators.required, extentionValidator])
+    });
+  }
+
+  onDeleteFile() {
+    const { name } = this.formDelete.value;
+    this.httpreq.requestPost('fileDelete', name, '')
       .subscribe((response: string) => {
-        this.share.data$.next('File deleted: ' + response);
+        if (response !== name) {
+          this.share.data$.next('File not exist!');
+        } else {
+          this.share.data$.next('File deleted: ' + response);
+        }
       });
   }
 }

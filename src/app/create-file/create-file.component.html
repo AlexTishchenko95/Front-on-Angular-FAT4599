@@ -1,18 +1,17 @@
-<form class="formCreate">
+<form class="formCreate" [formGroup]="formCreate">
   <mat-form-field>
-    <input
-      matInput
-      type="text"
-      name="field-create"
-      placeholder="Enter file name"
-      [(ngModel)]="inputCreate"
-    />
+    <input matInput formControlName="name" placeholder="Enter file name" />
+    <mat-error *ngIf="formCreate.invalid">
+      {{ formCreate.get('name').errors?.extention }}
+    </mat-error>
   </mat-form-field>
+
   <button
     mat-raised-button
     color="primary"
     class="btnCreate"
-    (click)="readCreateForm(inputCreate)"
+    (click)="onCreateFile()"
+    [disabled]="formCreate.invalid"
   >
     Create file
   </button>

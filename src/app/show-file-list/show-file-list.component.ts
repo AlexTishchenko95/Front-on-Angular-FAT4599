@@ -10,13 +10,24 @@ import { HttpReqService } from '../http-req.service';
 })
 
 export class ShowFileListComponent {
+  isPush: boolean;
 
-  constructor(private share: ShareDataService, private httpreq: HttpReqService) { }
+  constructor(private share: ShareDataService, private httpreq: HttpReqService) {
+  }
 
   showFileList() {
-    this.httpreq.getReq('http://localhost:3000/showFileList')
+    this.isPush = !this.isPush;
+    this.httpreq.requestGet('showFileList')
       .subscribe((response: string[]) => {
         this.share.dataList$.next(response);
+      });
+  }
+
+  closeFileList() {
+    this.isPush = !this.isPush;
+    this.httpreq.requestGet('showFileList')
+      .subscribe(() => {
+        this.share.dataList$.next([]);
       });
   }
 }

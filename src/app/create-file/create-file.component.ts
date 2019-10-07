@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { extentionValidator } from '../extention-validator';
 
 @Component({
   selector: 'app-create-file',
@@ -8,12 +10,22 @@ import { HttpReqService } from '../http-req.service';
   styleUrls: ['./create-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateFileComponent {
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService) { }
+export class CreateFileComponent implements OnInit {
+  formCreate: FormGroup;
 
-  readCreateForm(inputCreate) {
-    this.httpreq.getPost('http://localhost:3000/fileCreate', inputCreate, '')
+  constructor(private httpreq: HttpReqService, private share: ShareDataService) {
+  }
+
+  ngOnInit() {
+    this.formCreate = new FormGroup({
+      name: new FormControl('', [Validators.required, extentionValidator])
+    });
+  }
+
+  onCreateFile() {
+    const { name } = this.formCreate.value;
+    this.httpreq.requestPost('fileCreate', name, '')
       .subscribe((response: string) => {
         this.share.data$.next('File created: ' + response);
       });
