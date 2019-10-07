@@ -1,14 +1,18 @@
 <form class="formDelete" [formGroup]="formDelete">
   <mat-form-field>
-    <input matInput formControlName="inputForm" placeholder="Enter file name" />
+    <input matInput formControlName="name" placeholder="Enter file name" />
   </mat-form-field>
   <button
     mat-raised-button
     color="warn"
     class="btnDelete"
-    (click)="readDeleteForm()"
+    (click)="onDeleteFile()"
     [disabled]="formDelete.invalid"
   >
     Delete file
   </button>
+
+  <div style="color: red">
+    {{ formDelete.get('name').errors?.extention }}
+  </div>
 </form>

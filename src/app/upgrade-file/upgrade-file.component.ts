@@ -1,7 +1,14 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
 import { ShareDataService } from '../share-data.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+
+function extentionValidator(control: FormControl): ValidationErrors {
+  if (!control.value || control.value.endsWith('.txt')) {
+    return null;
+  }
+  return { extention: 'Invalid file name! File must be .txt' };
+}
 
 @Component({
   selector: 'app-upgrade-file',
@@ -9,33 +16,24 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./upgrade-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UpgradeFileComponent {
+export class UpgradeFileComponent implements OnInit {
   formUpgrade: FormGroup;
-  inputNameUpgrade: string;
-  inputTextUpgrade: string;
 
   constructor(private httpreq: HttpReqService, private share: ShareDataService) {
-    this.httpreq = httpreq;
-    this.share = share;
+  }
+
+  ngOnInit() {
     this.formUpgrade = new FormGroup({
-      inputNameForm: new FormControl('', Validators.required),
-      inputTextForm: new FormControl('', Validators.required)
+      name: new FormControl('', [Validators.required, extentionValidator]),
+      text: new FormControl('', Validators.required)
     });
   }
 
-  readUpgradeForm() {
-    this.inputNameUpgrade = this.formUpgrade.controls.inputNameForm.value;
-    this.inputTextUpgrade = this.formUpgrade.controls.inputTextForm.value;
-    if (this.inputNameUpgrade.endsWith('.txt') &&
-      this.formUpgrade.controls.inputNameForm.status === 'VALID') {
-      this.httpreq.requestPost('http://localhost:3000/upgradeFile', this.inputNameUpgrade, this.inputTextUpgrade)
-        .subscribe((response: string) => {
-          this.share.data$.next('File upgrated: ' + response);
-        });
-    } else {
-      this.share.data$.next('Invalid file name! File must be .txt, or you have invalid status in console');
-      console.log(this.formUpgrade.controls.inputNameForm.status);
-    }
-
+  onUpdateFile() {
+    const { name, text } = this.formUpgrade.value;
+    this.httpreq.requestPost('upgradeFile', name, text)
+      .subscribe((response: string) => {
+        this.share.data$.next('File upgrated: ' + response);
+      });
   }
 }

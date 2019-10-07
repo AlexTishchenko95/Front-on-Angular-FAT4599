@@ -1,7 +1,14 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+
+function extentionValidator(control: FormControl): ValidationErrors {
+  if (!control.value || control.value.endsWith('.txt')) {
+    return null;
+  }
+  return { extention: 'Invalid file name! File must be .txt' };
+}
 
 @Component({
   selector: 'app-delete-file',
@@ -10,34 +17,28 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class DeleteFileComponent {
+export class DeleteFileComponent implements OnInit {
   formDelete: FormGroup;
-  inputDelete: string;
-
 
   constructor(private httpreq: HttpReqService, private share: ShareDataService) {
-    this.httpreq = httpreq;
-    this.share = share;
+  }
+
+  ngOnInit() {
     this.formDelete = new FormGroup({
-      inputForm: new FormControl('', Validators.required)
+      name: new FormControl('', [Validators.required, extentionValidator])
     });
   }
 
-  readDeleteForm() {
-    this.inputDelete = this.formDelete.controls.inputForm.value;
-    if (this.inputDelete.endsWith('.txt') && this.formDelete.controls.inputForm.status === 'VALID') {
-      this.httpreq.requestPost('http://localhost:3000/fileDelete', this.inputDelete, '')
-        .subscribe((response: string) => {
-          if (response !== this.inputDelete) {
-            this.share.data$.next('File not exist!');
-          } else {
-            this.share.data$.next('File deleted: ' + response);
-          }
-        });
-    } else {
-      this.share.data$.next('Invalid file name! File must be .txt, or you have invalid status in console');
-      console.log(this.formDelete.controls.inputForm.status);
-    }
+  onDeleteFile() {
+    const { name } = this.formDelete.value;
+    this.httpreq.requestPost('fileDelete', name, '')
+      .subscribe((response: string) => {
+        if (response !== name) {
+          this.share.data$.next('File not exist!');
+        } else {
+          this.share.data$.next('File deleted: ' + response);
+        }
+      });
   }
 }
 

@@ -2,7 +2,7 @@
   <mat-form-field>
     <textarea
       matInput
-      formControlName="inputTextForm"
+      formControlName="text"
       placeholder="Enter text to add in upgrade file"
     ></textarea>
   </mat-form-field>
@@ -10,19 +10,20 @@
   <br />
 
   <mat-form-field>
-    <input
-      matInput
-      formControlName="inputNameForm"
-      placeholder="Enter file name"
-    />
+    <input matInput formControlName="name" placeholder="Enter file name" />
   </mat-form-field>
+
   <button
     mat-raised-button
     color="primary"
     class="btnUpgrade"
-    (click)="readUpgradeForm()"
+    (click)="onUpdateFile()"
     [disabled]="formUpgrade.invalid"
   >
     Upgrade file
   </button>
+
+  <div style="color: red">
+    {{ formUpgrade.get('name').errors?.extention }}
+  </div>
 </form>

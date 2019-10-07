@@ -1,15 +1,19 @@
 <form class="formCreate" [formGroup]="formCreate">
   <mat-form-field>
-    <input matInput formControlName="inputForm" placeholder="Enter file name" />
+    <input matInput formControlName="name" placeholder="Enter file name" />
   </mat-form-field>
 
   <button
     mat-raised-button
     color="primary"
     class="btnCreate"
-    (click)="readCreateForm()"
+    (click)="onCreateFile()"
     [disabled]="formCreate.invalid"
   >
     Create file
   </button>
+
+  <div style="color: red">
+    {{ formCreate.get('name').errors?.extention }}
+  </div>
 </form>
