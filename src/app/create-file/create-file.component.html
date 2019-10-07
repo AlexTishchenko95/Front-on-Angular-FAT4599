@@ -1,6 +1,9 @@
 <form class="formCreate" [formGroup]="formCreate">
   <mat-form-field>
     <input matInput formControlName="name" placeholder="Enter file name" />
+    <mat-error *ngIf="formCreate.invalid">
+      {{ formCreate.get('name').errors?.extention }}
+    </mat-error>
   </mat-form-field>
 
   <button
@@ -12,8 +15,4 @@
   >
     Create file
   </button>
-
-  <div style="color: red">
-    {{ formCreate.get('name').errors?.extention }}
-  </div>
 </form>
