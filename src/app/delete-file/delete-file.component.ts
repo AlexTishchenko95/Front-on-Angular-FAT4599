@@ -3,6 +3,8 @@ import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { extentionValidator } from '../extention-validator';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 
 @Component({
   selector: 'app-delete-file',
@@ -10,11 +12,10 @@ import { extentionValidator } from '../extention-validator';
   styleUrls: ['./delete-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class DeleteFileComponent implements OnInit {
   formDelete: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService) {
+  constructor(private httpreq: HttpReqService, private share: ShareDataService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -33,6 +34,15 @@ export class DeleteFileComponent implements OnInit {
           this.share.data$.next('File deleted: ' + response);
         }
       });
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogAcceptComponent, {
+      width: '300px',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      result ? this.onDeleteFile() : console.log('Dialog window closed');
+    });
   }
 }
 

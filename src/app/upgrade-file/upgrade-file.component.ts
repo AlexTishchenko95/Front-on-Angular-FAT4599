@@ -3,6 +3,8 @@ import { HttpReqService } from '../http-req.service';
 import { ShareDataService } from '../share-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { extentionValidator } from '../extention-validator';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 
 @Component({
   selector: 'app-upgrade-file',
@@ -13,7 +15,7 @@ import { extentionValidator } from '../extention-validator';
 export class UpgradeFileComponent implements OnInit {
   formUpgrade: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService) {
+  constructor(private httpreq: HttpReqService, private share: ShareDataService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -29,5 +31,14 @@ export class UpgradeFileComponent implements OnInit {
       .subscribe((response: string) => {
         this.share.data$.next('File upgrated: ' + response);
       });
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogAcceptComponent, {
+      width: '300px',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      result ? this.onUpdateFile() : console.log('Dialog window closed');
+    });
   }
 }
