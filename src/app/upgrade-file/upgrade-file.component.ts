@@ -1,14 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
 import { ShareDataService } from '../share-data.service';
-import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
-
-function extentionValidator(control: FormControl): ValidationErrors {
-  if (!control.value || control.value.endsWith('.txt')) {
-    return null;
-  }
-  return { extention: 'Invalid file name! File must be .txt' };
-}
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { extentionValidator } from '../extention-validator';
 
 @Component({
   selector: 'app-upgrade-file',
