@@ -8,6 +8,4 @@ import { MatDialogRef } from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogAcceptComponent {
-
-  constructor(public dialogRef: MatDialogRef<DialogAcceptComponent>) { }
 }

@@ -24,7 +24,7 @@ export class DeleteFileComponent implements OnInit {
     });
   }
 
-  onDeleteFile() {
+  deleteFile() {
     const { name } = this.formDelete.value;
     this.httpreq.requestPost('fileDelete', name, '')
       .subscribe((response: string) => {
@@ -36,13 +36,13 @@ export class DeleteFileComponent implements OnInit {
       });
   }
 
-  openDialog() {
+  onDeleteFile() {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.onDeleteFile();
+      if (result) {
+        this.deleteFile();
       }
     });
   }

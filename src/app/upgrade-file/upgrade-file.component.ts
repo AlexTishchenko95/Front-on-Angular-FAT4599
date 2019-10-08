@@ -25,7 +25,7 @@ export class UpgradeFileComponent implements OnInit {
     });
   }
 
-  onUpdateFile() {
+  upgradeFile() {
     const { name, text } = this.formUpgrade.value;
     this.httpreq.requestPost('upgradeFile', name, text)
       .subscribe((response: string) => {
@@ -33,13 +33,13 @@ export class UpgradeFileComponent implements OnInit {
       });
   }
 
-  openDialog() {
+  onUpgradeFile() {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.onUpdateFile();
+      if (result) {
+        this.upgradeFile();
       }
     });
   }
