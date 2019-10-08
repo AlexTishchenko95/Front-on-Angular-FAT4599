@@ -15,7 +15,7 @@ import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component'
 export class UpgradeFileComponent implements OnInit {
   formUpgrade: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService, public dialog: MatDialog) {
+  constructor(private httpreq: HttpReqService, private share: ShareDataService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -38,7 +38,9 @@ export class UpgradeFileComponent implements OnInit {
       width: '300px',
     });
     dialogRef.afterClosed().subscribe((result) => {
-      result ? this.onUpdateFile() : console.log('Dialog window closed');
+      if (result === true) {
+        this.onUpdateFile();
+      }
     });
   }
 }

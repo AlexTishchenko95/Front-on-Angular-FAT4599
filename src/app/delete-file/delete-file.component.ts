@@ -15,7 +15,7 @@ import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component'
 export class DeleteFileComponent implements OnInit {
   formDelete: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService, public dialog: MatDialog) {
+  constructor(private httpreq: HttpReqService, private share: ShareDataService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -41,7 +41,9 @@ export class DeleteFileComponent implements OnInit {
       width: '300px',
     });
     dialogRef.afterClosed().subscribe((result) => {
-      result ? this.onDeleteFile() : console.log('Dialog window closed');
+      if (result === true) {
+        this.onDeleteFile();
+      }
     });
   }
 }
