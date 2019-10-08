@@ -1,19 +1,16 @@
-<button
-  *ngIf="!isPush"
-  mat-raised-button
-  color="primary"
-  class="fileList"
-  (click)="showFileList()"
->
-  Show file list
-</button>
+<br />
+<br />
 
-<button
-  *ngIf="isPush"
-  mat-raised-button
-  color="primary"
-  class="fileList"
-  (click)="closeFileList()"
->
-  Close file list
-</button>
+<mat-list class="file-list">
+  <mat-divider></mat-divider>
+  <mat-list-item *ngFor="let item of list$ | async">
+    <a class="item">{{ item }}</a>
+    <button mat-icon-button (click)="onUpdateFile()">
+      <mat-icon class="item-icon">border_color</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onDeleteFile()">
+      <mat-icon class="item-icon">delete_outline</mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>

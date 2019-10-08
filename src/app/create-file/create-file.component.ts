@@ -3,6 +3,7 @@ import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { extentionValidator } from '../extention-validator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-file',
@@ -14,7 +15,7 @@ import { extentionValidator } from '../extention-validator';
 export class CreateFileComponent implements OnInit {
   formCreate: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService) {
+  constructor(private httpreq: HttpReqService, private share: ShareDataService, private router: Router) {
   }
 
   ngOnInit() {
@@ -28,6 +29,7 @@ export class CreateFileComponent implements OnInit {
     this.httpreq.requestPost('fileCreate', name, '')
       .subscribe((response: string) => {
         this.share.data$.next('File created: ' + response);
+        this.router.navigate(['all']);
       });
   }
 }

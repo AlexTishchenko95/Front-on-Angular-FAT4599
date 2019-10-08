@@ -10,10 +10,10 @@ import { HeaderModule } from './header/header.module';
 import { InnerTextModule } from './inner-text/inner-text.module';
 import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
 
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -24,7 +24,7 @@ import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
     UpgradeFileModule,
     HeaderModule,
     InnerTextModule,
-    DialogAcceptModule
+    DialogAcceptModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
