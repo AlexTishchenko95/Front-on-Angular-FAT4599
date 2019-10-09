@@ -15,8 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     HttpClientModule,
     MatInputModule,
-    BrowserAnimationsModule,
     MatButtonModule,
+    BrowserAnimationsModule,
     MatIconModule,
     ReactiveFormsModule
   ],

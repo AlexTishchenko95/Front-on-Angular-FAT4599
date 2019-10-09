@@ -1,14 +1,15 @@
 <br />
 <br />
+<h3 style="margin: 0 10px;">Files in directory:</h3>
 
 <mat-list class="file-list">
   <mat-divider></mat-divider>
   <mat-list-item *ngFor="let item of list$ | async">
     <a class="item">{{ item }}</a>
-    <button mat-icon-button (click)="onUpdateFile()">
+    <button mat-icon-button (click)="onUpdateFile(item)">
       <mat-icon class="item-icon">border_color</mat-icon>
     </button>
-    <button mat-icon-button (click)="onDeleteFile()">
+    <button mat-icon-button (click)="onDeleteFile(item)">
       <mat-icon class="item-icon">delete_outline</mat-icon>
     </button>
     <mat-divider></mat-divider>

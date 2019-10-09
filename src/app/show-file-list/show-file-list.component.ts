@@ -24,12 +24,12 @@ export class ShowFileListComponent implements OnInit {
       });
   }
 
-  onUpdateFile() {
-    this.router.navigate(['update']);
+  onUpdateFile(name) {
+    this.router.navigate(['update', name]);
   }
 
-  onDeleteFile() {
-    this.router.navigate(['remove']);
+  onDeleteFile(name) {
+    this.router.navigate(['remove', name]);
   }
 }
 

@@ -9,13 +9,6 @@
 
   <br />
 
-  <mat-form-field>
-    <input matInput formControlName="name" placeholder="Enter file name" />
-    <mat-error *ngIf="formUpgrade.invalid">
-      {{ formUpgrade.get('name').errors?.extention }}
-    </mat-error>
-  </mat-form-field>
-
   <button
     mat-raised-button
     color="primary"

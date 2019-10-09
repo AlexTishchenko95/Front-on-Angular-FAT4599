@@ -7,7 +7,6 @@ import { CreateFileModule } from './create-file/create-file.module';
 import { DeleteFileModule } from './delete-file/delete-file.module';
 import { UpgradeFileModule } from './upgrade-file/upgrade-file.module';
 import { HeaderModule } from './header/header.module';
-import { InnerTextModule } from './inner-text/inner-text.module';
 import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
 
 @NgModule({
@@ -23,8 +22,7 @@ import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
     DeleteFileModule,
     UpgradeFileModule,
     HeaderModule,
-    InnerTextModule,
-    DialogAcceptModule,
+    DialogAcceptModule
   ],
   providers: [],
   bootstrap: [AppComponent]

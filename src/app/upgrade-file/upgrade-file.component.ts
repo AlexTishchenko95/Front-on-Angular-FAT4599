@@ -1,10 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
-import { ShareDataService } from '../share-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { extentionValidator } from '../extention-validator';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-upgrade-file',
@@ -13,24 +12,17 @@ import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpgradeFileComponent implements OnInit {
+  name: string;
   formUpgrade: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService, private dialog: MatDialog) {
+  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
+    this.route.params.subscribe(params => this.name = params.id);
   }
 
   ngOnInit() {
     this.formUpgrade = new FormGroup({
-      name: new FormControl('', [Validators.required, extentionValidator]),
       text: new FormControl('', Validators.required)
     });
-  }
-
-  upgradeFile() {
-    const { name, text } = this.formUpgrade.value;
-    this.httpreq.requestPost('upgradeFile', name, text)
-      .subscribe((response: string) => {
-        this.share.data$.next('File upgrated: ' + response);
-      });
   }
 
   onUpgradeFile() {
@@ -39,8 +31,18 @@ export class UpgradeFileComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.upgradeFile();
+        this.upgradeFile(this.name);
+      } else {
+        this.router.navigate(['all']);
       }
     });
+  }
+
+  upgradeFile(name) {
+    const { text } = this.formUpgrade.value;
+    this.httpreq.requestPost('upgradeFile', name, text)
+      .subscribe(() => {
+        this.router.navigate(['all']);
+      });
   }
 }
