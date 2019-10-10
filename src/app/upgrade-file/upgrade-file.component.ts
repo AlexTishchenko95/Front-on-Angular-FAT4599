@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upgrade-file',
@@ -27,14 +28,14 @@ export class UpgradeFileComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
-    this.route.params.subscribe(params => this.name = params.id);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.upgradeFile(this.name);
-      } else {
-        this.router.navigate(['all']);
-      }
-    });
+    this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+      .subscribe(({ res, id }) => {
+        if (res) {
+          this.upgradeFile(id);
+        } else {
+          this.router.navigate(['all']);
+        }
+      });
   }
 
   upgradeFile(name: string) {

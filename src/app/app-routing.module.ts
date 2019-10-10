@@ -4,9 +4,9 @@ import { ShowFileListComponent } from './show-file-list/show-file-list.component
 
 const routes: Routes = [
   { path: 'all', component: ShowFileListComponent },
-  { path: 'create', loadChildren: './create-file/create-file.module#CreateFileModule' },
-  { path: 'remove/:id', loadChildren: './delete-file/delete-file.module#DeleteFileModule' },
-  { path: 'update/:id', loadChildren: './upgrade-file/upgrade-file.module#UpgradeFileModule' },
+  { path: 'create', loadChildren: () => import('./create-file/create-file.module').then(m => m.CreateFileModule) },
+  { path: 'remove/:id', loadChildren: () => import('./delete-file/delete-file.module').then(m => m.DeleteFileModule) },
+  { path: 'update/:id', loadChildren: () => import('./upgrade-file/upgrade-file.module').then(m => m.UpgradeFileModule) },
   { path: '**', redirectTo: 'all' },
 ];
 
