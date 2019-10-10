@@ -9,12 +9,4 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
 
   constructor(private router: Router) { }
-
-  goToCreate() {
-    this.router.navigate(['create']);
-  }
-
-  goToAll() {
-    this.router.navigate(['all']);
-  }
 }

@@ -4,8 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { DeleteFileComponent } from './delete-file.component';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [{ path: '', component: DeleteFileComponent }];
 
 @NgModule({
   declarations: [DeleteFileComponent],
@@ -14,9 +16,9 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     HttpClientModule,
     MatInputModule,
-    BrowserAnimationsModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule.forChild(routes)
   ],
   exports: [DeleteFileComponent]
 })

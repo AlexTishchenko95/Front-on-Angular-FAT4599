@@ -13,14 +13,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class DeleteFileComponent implements OnInit {
   name: string;
 
-  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
-    this.route.params.subscribe(params => this.name = params.id);
-  }
+  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
+    this.route.params.subscribe(params => this.name = params.id);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteFile(this.name);
@@ -30,10 +29,10 @@ export class DeleteFileComponent implements OnInit {
     });
   }
 
-  deleteFile(name) {
+  deleteFile(name: string) {
     this.httpreq.requestPost('fileDelete', name, '')
       .subscribe(() => {
-        setTimeout(() => this.router.navigate(['all']), 100);
+        this.router.navigate(['all']);
       });
   }
 }

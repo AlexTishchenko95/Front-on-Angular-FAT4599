@@ -4,9 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateFileComponent } from './create-file.component';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [{ path: '', component: CreateFileComponent }];
+
 
 @NgModule({
   declarations: [CreateFileComponent],
@@ -16,9 +19,9 @@ import { MatIconModule } from '@angular/material/icon';
     HttpClientModule,
     MatInputModule,
     MatButtonModule,
-    BrowserAnimationsModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule.forChild(routes)
   ],
   exports: [CreateFileComponent]
 })

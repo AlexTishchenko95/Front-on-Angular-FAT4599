@@ -15,9 +15,7 @@ export class UpgradeFileComponent implements OnInit {
   name: string;
   formUpgrade: FormGroup;
 
-  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
-    this.route.params.subscribe(params => this.name = params.id);
-  }
+  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.formUpgrade = new FormGroup({
@@ -29,6 +27,7 @@ export class UpgradeFileComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
+    this.route.params.subscribe(params => this.name = params.id);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.upgradeFile(this.name);
@@ -38,7 +37,7 @@ export class UpgradeFileComponent implements OnInit {
     });
   }
 
-  upgradeFile(name) {
+  upgradeFile(name: string) {
     const { text } = this.formUpgrade.value;
     this.httpreq.requestPost('upgradeFile', name, text)
       .subscribe(() => {

@@ -2,14 +2,10 @@
   <mat-toolbar-row>
     <span class="header-text"> File Manager </span>
     <span class="spacer"></span>
-    <a mat-flat-button class="nav-element" color="primary" (click)="goToAll()"
+    <a mat-flat-button class="nav-element" color="primary" routerLink="/all"
       >ALL</a
     >
-    <a
-      mat-flat-button
-      class="nav-element"
-      color="primary"
-      (click)="goToCreate()"
+    <a mat-flat-button class="nav-element" color="primary" routerLink="/create"
       >Create</a
     >
   </mat-toolbar-row>

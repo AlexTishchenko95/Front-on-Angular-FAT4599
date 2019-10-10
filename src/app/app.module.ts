@@ -8,6 +8,7 @@ import { DeleteFileModule } from './delete-file/delete-file.module';
 import { UpgradeFileModule } from './upgrade-file/upgrade-file.module';
 import { HeaderModule } from './header/header.module';
 import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { DialogAcceptModule } from './dialog-accept/dialog-accept.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ShowFileListModule,
     CreateFileModule,
