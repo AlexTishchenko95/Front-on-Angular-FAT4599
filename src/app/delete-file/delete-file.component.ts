@@ -1,10 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { extentionValidator } from '../extention-validator';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-delete-file',
@@ -13,38 +12,31 @@ import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteFileComponent implements OnInit {
-  formDelete: FormGroup;
+  name: string;
 
-  constructor(private httpreq: HttpReqService, private share: ShareDataService, private dialog: MatDialog) {
-  }
+  constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.formDelete = new FormGroup({
-      name: new FormControl('', [Validators.required, extentionValidator])
+    const dialogRef = this.dialog.open(DialogAcceptComponent, {
+      width: '300px',
     });
-  }
-
-  deleteFile() {
-    const { name } = this.formDelete.value;
-    this.httpreq.requestPost('fileDelete', name, '')
-      .subscribe((response: string) => {
-        if (response !== name) {
-          this.share.data$.next('File not exist!');
+    this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+      .subscribe(({ res, id }) => {
+        if (res) {
+          this.deleteFile(id);
         } else {
-          this.share.data$.next('File deleted: ' + response);
+          this.router.navigate(['all']);
         }
       });
   }
 
-  onDeleteFile() {
-    const dialogRef = this.dialog.open(DialogAcceptComponent, {
-      width: '300px',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.deleteFile();
-      }
-    });
+  deleteFile(name: string) {
+    this.httpreq.requestPost('fileDelete', name, '')
+      .subscribe(() => {
+        this.router.navigate(['all']);
+      });
   }
 }
+
+
 

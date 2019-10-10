@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-file-list',
@@ -9,27 +11,27 @@ import { HttpReqService } from '../http-req.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ShowFileListComponent {
-  isPush: boolean;
+export class ShowFileListComponent implements OnInit {
+  list$: Observable<string[]> = this.share.dataList$;
 
-  constructor(private share: ShareDataService, private httpreq: HttpReqService) {
+  constructor(private share: ShareDataService, private httpreq: HttpReqService, private router: Router) {
   }
 
-  showFileList() {
-    this.isPush = !this.isPush;
+  ngOnInit() {
     this.httpreq.requestGet('showFileList')
       .subscribe((response: string[]) => {
         this.share.dataList$.next(response);
       });
   }
 
-  closeFileList() {
-    this.isPush = !this.isPush;
-    this.httpreq.requestGet('showFileList')
-      .subscribe(() => {
-        this.share.dataList$.next([]);
-      });
+  onUpdateFile(name) {
+    this.router.navigate(['update', name]);
+  }
+
+  onDeleteFile(name) {
+    this.router.navigate(['remove', name]);
   }
 }
+
 
 
