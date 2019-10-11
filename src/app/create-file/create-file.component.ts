@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { extentionValidator } from '../extention-validator';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-file',
@@ -11,8 +12,9 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class CreateFileComponent implements OnInit {
+export class CreateFileComponent implements OnInit, OnDestroy {
   formCreate: FormGroup;
+  subscriptions: Subscription = new Subscription();
 
   constructor(private httpreq: HttpReqService, private router: Router) {
   }
@@ -25,9 +27,13 @@ export class CreateFileComponent implements OnInit {
 
   onCreateFile() {
     const { name } = this.formCreate.value;
-    this.httpreq.requestPost('fileCreate', name, '')
+    this.subscriptions.add(this.httpreq.requestPost('fileCreate', name, '')
       .subscribe(() => {
         this.router.navigate(['all']);
-      });
+      }));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }
