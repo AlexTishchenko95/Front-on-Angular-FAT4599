@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 export class UpgradeFileComponent implements OnInit, OnDestroy {
   name: string;
   formUpgrade: FormGroup;
-  subscriptions: Subscription = new Subscription();
+  subscriptions: Subscription[] = [];
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -30,7 +30,7 @@ export class UpgradeFileComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
-    this.subscriptions.add(this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+    this.subscriptions.push(this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
       .subscribe(({ res, id }) => {
         if (res) {
           this.upgradeFile(id);
@@ -42,13 +42,15 @@ export class UpgradeFileComponent implements OnInit, OnDestroy {
 
   upgradeFile(name: string) {
     const { text } = this.formUpgrade.value;
-    this.subscriptions.add(this.httpreq.requestPost('upgradeFile', name, text)
+    this.subscriptions.push(this.httpreq.requestPost('upgradeFile', name, text)
       .subscribe(() => {
         this.router.navigate(['all']);
       }));
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.subscriptions.forEach(
+      (subscription) => subscription.unsubscribe());
+    this.subscriptions = [];
   }
 }

@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class DeleteFileComponent implements OnInit, OnDestroy {
   name: string;
-  subscriptions: Subscription = new Subscription();
+  subscriptions: Subscription[] = [];
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -22,7 +22,7 @@ export class DeleteFileComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DialogAcceptComponent, {
       width: '300px',
     });
-    this.subscriptions.add(this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+    this.subscriptions.push(this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
       .subscribe(({ res, id }) => {
         if (res) {
           this.deleteFile(id);
@@ -33,14 +33,16 @@ export class DeleteFileComponent implements OnInit, OnDestroy {
   }
 
   deleteFile(name: string) {
-    this.subscriptions.add(this.httpreq.requestPost('fileDelete', name, '')
+    this.subscriptions.push(this.httpreq.requestPost('fileDelete', name, '')
       .subscribe(() => {
         this.router.navigate(['all']);
       }));
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.subscriptions.forEach(
+      (subscription) => subscription.unsubscribe());
+    this.subscriptions = [];
   }
 }
 

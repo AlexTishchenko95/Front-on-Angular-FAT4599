@@ -13,13 +13,13 @@ import { Router } from '@angular/router';
 
 export class ShowFileListComponent implements OnInit, OnDestroy {
   list$: Observable<string[]> = this.share.dataList$;
-  subscriptions: Subscription = new Subscription();
+  subscription: Subscription;
 
   constructor(private share: ShareDataService, private httpreq: HttpReqService, private router: Router) {
   }
 
   ngOnInit() {
-    this.subscriptions.add(this.httpreq.requestGet('showFileList')
+    this.subscription = (this.httpreq.requestGet('showFileList')
       .subscribe((response: string[]) => {
         this.share.dataList$.next(response);
       }));
@@ -34,9 +34,7 @@ export class ShowFileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }
-
-
 

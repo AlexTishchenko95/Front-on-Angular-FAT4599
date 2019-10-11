@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 
 export class CreateFileComponent implements OnInit, OnDestroy {
   formCreate: FormGroup;
-  subscriptions: Subscription = new Subscription();
+  subscription: Subscription;
 
   constructor(private httpreq: HttpReqService, private router: Router) {
   }
@@ -27,13 +27,13 @@ export class CreateFileComponent implements OnInit, OnDestroy {
 
   onCreateFile() {
     const { name } = this.formCreate.value;
-    this.subscriptions.add(this.httpreq.requestPost('fileCreate', name, '')
+    this.subscription = this.httpreq.requestPost('fileCreate', name, '')
       .subscribe(() => {
         this.router.navigate(['all']);
-      }));
+      });
   }
 
   ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 }
