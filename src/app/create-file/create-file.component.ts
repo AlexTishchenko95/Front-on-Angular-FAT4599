@@ -3,7 +3,7 @@ import { HttpReqService } from '../http-req.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { extentionValidator } from '../extention-validator';
 import { Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
 
 export class CreateFileComponent implements OnInit, OnDestroy {
   formCreate: FormGroup;
-  subscription: ReplaySubject<any> = new ReplaySubject<any>();
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private httpreq: HttpReqService, private router: Router) {
   }
@@ -29,14 +29,14 @@ export class CreateFileComponent implements OnInit, OnDestroy {
   onCreateFile() {
     const { name } = this.formCreate.value;
     this.httpreq.requestPost('fileCreate', name, '')
-      .pipe(takeUntil(this.subscription))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.router.navigate(['all']);
       });
   }
 
   ngOnDestroy() {
-    this.subscription.next(null);
-    this.subscription.complete();
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 }

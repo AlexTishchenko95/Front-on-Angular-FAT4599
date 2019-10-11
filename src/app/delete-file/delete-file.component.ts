@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-delete-file',
@@ -14,7 +14,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class DeleteFileComponent implements OnInit, OnDestroy {
   name: string;
-  subscriptions: ReplaySubject<any> = new ReplaySubject<any>();
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -23,7 +23,7 @@ export class DeleteFileComponent implements OnInit, OnDestroy {
       width: '300px',
     });
     this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
-      .pipe(takeUntil(this.subscriptions))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({ res, id }) => {
         if (res) {
           this.deleteFile(id);
@@ -35,15 +35,15 @@ export class DeleteFileComponent implements OnInit, OnDestroy {
 
   deleteFile(name: string) {
     this.httpreq.requestPost('fileDelete', name, '')
-      .pipe(takeUntil(this.subscriptions))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.router.navigate(['all']);
       });
   }
 
   ngOnDestroy() {
-    this.subscriptions.next(null);
-    this.subscriptions.complete();
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 }
 

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-upgrade-file',
@@ -16,7 +16,7 @@ import { ReplaySubject } from 'rxjs';
 export class UpgradeFileComponent implements OnInit, OnDestroy {
   name: string;
   formUpgrade: FormGroup;
-  subscriptions: ReplaySubject<any> = new ReplaySubject<any>();
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -31,7 +31,7 @@ export class UpgradeFileComponent implements OnInit, OnDestroy {
       width: '300px',
     });
     this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
-      .pipe(takeUntil(this.subscriptions))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({ res, id }) => {
         if (res) {
           this.upgradeFile(id);
@@ -44,14 +44,14 @@ export class UpgradeFileComponent implements OnInit, OnDestroy {
   upgradeFile(name: string) {
     const { text } = this.formUpgrade.value;
     this.httpreq.requestPost('upgradeFile', name, text)
-      .pipe(takeUntil(this.subscriptions))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.router.navigate(['all']);
       });
   }
 
   ngOnDestroy() {
-    this.subscriptions.next(null);
-    this.subscriptions.complete();
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 }
