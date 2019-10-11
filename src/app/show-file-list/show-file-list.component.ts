@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { ShareDataService } from '../share-data.service';
 import { HttpReqService } from '../http-req.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-show-file-list',
@@ -13,13 +14,14 @@ import { Router } from '@angular/router';
 
 export class ShowFileListComponent implements OnInit, OnDestroy {
   list$: Observable<string[]> = this.share.dataList$;
-  subscription: Subscription;
+  subscription: ReplaySubject<any> = new ReplaySubject<any>();
 
   constructor(private share: ShareDataService, private httpreq: HttpReqService, private router: Router) {
   }
 
   ngOnInit() {
-    this.subscription = (this.httpreq.requestGet('showFileList')
+    (this.httpreq.requestGet('showFileList')
+      .pipe(takeUntil(this.subscription))
       .subscribe((response: string[]) => {
         this.share.dataList$.next(response);
       }));
@@ -34,7 +36,8 @@ export class ShowFileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription.next(null);
+    this.subscription.complete();
   }
 }
 
