@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-delete-file',
@@ -11,8 +12,9 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrls: ['./delete-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DeleteFileComponent implements OnInit {
+export class DeleteFileComponent implements OnInit, OnDestroy {
   name: string;
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -21,6 +23,7 @@ export class DeleteFileComponent implements OnInit {
       width: '300px',
     });
     this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({ res, id }) => {
         if (res) {
           this.deleteFile(id);
@@ -32,9 +35,15 @@ export class DeleteFileComponent implements OnInit {
 
   deleteFile(name: string) {
     this.httpreq.requestPost('fileDelete', name, '')
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.router.navigate(['all']);
       });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 }
 

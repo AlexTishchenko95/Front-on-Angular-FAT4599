@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { HttpReqService } from '../http-req.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAcceptComponent } from '../dialog-accept/dialog-accept.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-upgrade-file',
@@ -12,9 +13,10 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrls: ['./upgrade-file.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UpgradeFileComponent implements OnInit {
+export class UpgradeFileComponent implements OnInit, OnDestroy {
   name: string;
   formUpgrade: FormGroup;
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private httpreq: HttpReqService, private dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
 
@@ -29,6 +31,7 @@ export class UpgradeFileComponent implements OnInit {
       width: '300px',
     });
     this.route.params.pipe(switchMap(({ id }) => dialogRef.afterClosed().pipe(map(res => ({ res, id })))))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({ res, id }) => {
         if (res) {
           this.upgradeFile(id);
@@ -41,8 +44,14 @@ export class UpgradeFileComponent implements OnInit {
   upgradeFile(name: string) {
     const { text } = this.formUpgrade.value;
     this.httpreq.requestPost('upgradeFile', name, text)
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.router.navigate(['all']);
       });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 }
